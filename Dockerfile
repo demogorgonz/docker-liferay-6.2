@@ -1,6 +1,4 @@
-# Liferay 6.2
-#
-# VERSION 0.0.5
+# Liferay-portal-6.2-ce-ga3
 #
 
 # 0.0.1 : initial file with java 7u60
