@@ -8,25 +8,27 @@
 # 0.0.5 : bug with echo on setenv.sh
 
 FROM snasello/docker-debian-java7:7u71
-
+ENV http_proxy http://10.35.1.93:8080
+ENV https_proxy http://10.35.1.93:8080
+RUN apt-get update -y && apt-get upgrade -y
 MAINTAINER Samuel Nasello <samuel.nasello@elosi.com>
 
 # install liferay
-RUN apt-get install -y unzip \
-	&& curl -O -s -k -L -C - http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.2.2%20GA3/liferay-portal-tomcat-jre-6.2-ce-ga3-20150115105139957.zip \
-	&& unzip liferay-portal-tomcat-jre-6.2-ce-ga3-20150115105139957.zip -d /opt \
-	&& rm liferay-portal-tomcat-jre-6.2-ce-ga3-20150115105139957.zip
+RUN apt-get install -y unzip zip \
+        && curl -O -s -k -L -C - http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/6.2.2%20GA3/liferay-portal-tomcat-jre-6.2-ce-ga3-20150115105139957.zip \
+        && unzip liferay-portal-tomcat-jre-6.2-ce-ga3-20150115105139957.zip -d /opt \
+        && rm liferay-portal-tomcat-jre-6.2-ce-ga3-20150115105139957.zip
 
 # add config for bdd
-RUN /bin/echo -e '\nCATALINA_OPTS="$CATALINA_OPTS -Dexternal-properties=portal-bd-${DB_TYPE}.properties"' >> /opt/liferay-portal-6.2-ce-ga2/tomcat-7.0.42/bin/setenv.sh
+RUN /bin/echo -e '\nCATALINA_OPTS="$CATALINA_OPTS -Dexternal-properties=portal-bd-${DB_TYPE}.properties"' >> /opt/liferay-portal-6.2-ce-ga3/tomcat-7.0.42/bin/setenv.sh
 
 # add configuration liferay file
-ADD lep/portal-bundle.properties /opt/liferay-portal-tomcat-jre-6.2-ce-ga3/portal-bundle.properties
-ADD lep/portal-bd-MYSQL.properties /opt/liferay-portal-tomcat-jre-6.2-ce-ga3/portal-bd-MYSQL.properties
-ADD lep/portal-bd-POSTGRESQL.properties /opt/liferay-portal-tomcat-jre-6.2-ce-ga3/portal-bd-POSTGRESQL.properties
+ADD https://raw.githubusercontent.com/demogorgonz/docker-liferay-6.2/master/lep/portal-bundle.properties /opt/liferay-portal-6.2-ce-ga3/portal-bundle.properties
+ADD https://raw.githubusercontent.com/demogorgonz/docker-liferay-6.2/master/lep/portal-bd-MYSQL.properties /opt/liferay-portal-6.2-ce-ga3/portal-bd-MYSQL.properties
+ADD https://raw.githubusercontent.com/demogorgonz/docker-liferay-6.2/master/lep/portal-bd-POSTGRESQL.properties /opt/liferay-portal-6.2-ce-ga3/portal-bd-POSTGRESQL.properties
 
 # volumes
-VOLUME ["/var/liferay-home", "/opt/liferay-portal-tomcat-jre-6.2-ce-ga3/"]
+VOLUME ["/var/liferay-home", "/opt/liferay-portal-6.2-ce-ga3/"]
 
 # Ports
 EXPOSE 8080
@@ -36,4 +38,4 @@ ENV JAVA_HOME /opt/java
 
 # EXEC
 CMD ["run"]
-ENTRYPOINT ["/opt/liferay-portal-tomcat-jre-6.2-ce-ga3/tomcat-7.0.42/bin/catalina.sh"]
+ENTRYPOINT ["/opt/liferay-portal-6.2-ce-ga3/tomcat-7.0.42/bin/catalina.sh"]
