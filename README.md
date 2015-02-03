@@ -1,4 +1,5 @@
-# Docker image for liferay 6.2
+# Docker image for liferay 6.2 
+# Liferay-portal-6.2-ce-ga3
 The image is build in docker registry : https://registry.hub.docker.com/u/snasello/liferay-6.2/
 you can pull it :
 ```
