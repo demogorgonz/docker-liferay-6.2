@@ -1,6 +1,7 @@
 # Docker image for liferay 6.2 
 # Liferay-portal-6.2-ce-ga3
 Source: https://github.com/snasello/docker-liferay-6.2
+
 Default database is MySQL.
 
 ## Build image
